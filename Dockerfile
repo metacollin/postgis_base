@@ -27,17 +27,12 @@ RUN /usr/lib/postgresql/11/bin/pg_ctl -D /etc/postgresql/11/main start
 EXPOSE 5432
 USER root
 
-# 3.  Temporarily let us make changes to the database without switching to the postgres user.
-RUN echo "host all  all    0.0.0.0/0  trust" >> /etc/postgresql/11/main/pg_hba.conf && \
-    echo "listen_addresses='*'" >> /etc/postgresql/11/main/postgresql.conf
-RUN sed -i "s/peer/trust/" /etc/postgresql/11/main/pg_hba.conf
-
-# 4.  Install GDAL 2.4.1
+# 3.  Install GDAL 2.4.1
 RUN add-apt-repository ppa:ubuntugis/ubuntugis-unstable && apt-get update
 RUN apt-get update
 RUN apt-get install -y gdal-bin libgdal-dev
 
-# 5.  Install GEOS 3.7.1
+# 4.  Install GEOS 3.7.1
 RUN apt-get install -y netcat build-essential libxml2 libxml2-dev libprotobuf-c1 libprotobuf-c-dev  \
      libprotobuf-dev protobuf-compiler protobuf-c-compiler
 RUN wget http://download.osgeo.org/geos/geos-3.7.1.tar.bz2
@@ -45,13 +40,16 @@ RUN tar -xvjf geos-3.7.1.tar.bz2
 RUN (export CPLUS_INCLUDE_PATH=/usr/include/gdal; \
      export C_INCLUDE_PATH=/usr/include/gdal; \ 
      cd geos-3.7.1 && ./configure && make -j`cat /proc/cpuinfo | awk '/^processor/{print $3}' | wc -l` && make install)
+RUN rm -rf geos-3.7.1
+RUN rm geos-3.7.1.tar.bz2
 
-# 6.  Install PostGIS 2.5.2
+# 5.  Install PostGIS 2.5.2
 RUN wget https://download.osgeo.org/postgis/source/postgis-2.5.2.tar.gz
 RUN tar -xvzf postgis-2.5.2.tar.gz
 RUN (export CPLUS_INCLUDE_PATH=/usr/include/gdal; \ 
      export C_INCLUDE_PATH=/usr/include/gdal; \
      cd postgis-2.5.2 && ./configure && make -j`cat /proc/cpuinfo | awk '/^processor/{print $3}' | wc -l` && make install)
-
+RUN rm -rf postgis-2.5.2
+RUN rm postgis-2.5.2.tar.gz
 
 CMD ["true"]
