@@ -52,4 +52,14 @@ RUN (export CPLUS_INCLUDE_PATH=/usr/include/gdal; \
 RUN rm -rf postgis-2.5.2
 RUN rm postgis-2.5.2.tar.gz
 
+RUN apt-get install -y cmake
+RUN wget https://github.com/isciences/exactextract/archive/master.zip
+RUN unzip master.zip 
+RUN cd exactextract-master && mkdir cmake-build-release && cd cmake-build-release && cmake -DCMAKE_BUILD_TYPE=Release .. && \
+    make && make install
+RUN rm -rf exactextract-master
+RUN rm master.zip
+
+
+
 CMD ["true"]
