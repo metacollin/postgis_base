@@ -12,14 +12,14 @@ FROM ubuntu:18.04
 # PROJ 6.0.0
 # Versions in bionic beaver repos are out of date.
 RUN apt-get update
-RUN apt-get install -y wget less systemd gnupg software-properties-common
+RUN DEBIAN_FRONTEND="noninteractive" apt-get install -y wget less systemd gnupg software-properties-common
 
 # 1.  Install Postgresql 11.2
 RUN touch /etc/apt/sources.list.d/pgdg.list
 RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ bionic-pgdg main" > /etc/apt/sources.list.d/pgdg.list
 RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
 RUN apt-get update
-RUN apt-get -y install postgresql-11 postgresql-server-dev-11
+RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install postgresql-11 postgresql-server-dev-11
 
 # 2.  Sanity check. Docker build phase will fail if postgres isn't working.
 USER postgres
@@ -30,10 +30,10 @@ USER root
 # 3.  Install GDAL 2.4.1
 RUN add-apt-repository ppa:ubuntugis/ubuntugis-unstable && apt-get update
 RUN apt-get update
-RUN apt-get install -y gdal-bin libgdal-dev
+RUN DEBIAN_FRONTEND="noninteractive" apt-get install -y gdal-bin libgdal-dev
 
 # 4.  Install GEOS 3.7.1
-RUN apt-get install -y netcat build-essential libxml2 libxml2-dev libprotobuf-c1 libprotobuf-c-dev  \
+RUN DEBIAN_FRONTEND="noninteractive" apt-get install -y netcat build-essential libxml2 libxml2-dev libprotobuf-c1 libprotobuf-c-dev  \
      libprotobuf-dev protobuf-compiler protobuf-c-compiler
 RUN wget http://download.osgeo.org/geos/geos-3.7.1.tar.bz2
 RUN tar -xvjf geos-3.7.1.tar.bz2
@@ -52,7 +52,7 @@ RUN (export CPLUS_INCLUDE_PATH=/usr/include/gdal; \
 RUN rm -rf postgis-2.5.2
 RUN rm postgis-2.5.2.tar.gz
 
-RUN apt-get install -y cmake unzip
+RUN DEBIAN_FRONTEND="noninteractive" apt-get install -y cmake unzip
 RUN wget https://github.com/isciences/exactextract/archive/master.zip
 RUN unzip master.zip 
 RUN cd exactextract-master && mkdir cmake-build-release && cd cmake-build-release && cmake -DCMAKE_BUILD_TYPE=Release .. && \
