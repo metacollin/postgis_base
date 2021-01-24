@@ -1,4 +1,4 @@
-FROM ubuntu:19.10
+FROM ubuntu:20.04
 # This is intended only as a base image, and only intended as an intermediate
 # build phase, not a service that is run.  If run, it will immediately exit.
 # It is like the Mr. Meeseeks of docker containers.  Existence is pain.
