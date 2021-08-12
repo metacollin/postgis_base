@@ -7,7 +7,7 @@ RUN apt-get update
 RUN DEBIAN_FRONTEND="noninteractive" apt-get install -y wget less systemd gnupg software-properties-common
 
 RUN touch /etc/apt/sources.list.d/pgdg.list
-RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ eoan-pgdg main" > /etc/apt/sources.list.d/pgdg.list
+RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ focal-pgdg main" > /etc/apt/sources.list.d/pgdg.list
 RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
 RUN apt-get update
 RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install postgresql-12 postgresql-server-dev-12 netcat build-essential libxml2 libxml2-dev libprotobuf-c1 libprotobuf-c-dev  \
