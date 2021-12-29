@@ -17,32 +17,35 @@ USER postgres
 RUN /usr/lib/postgresql/12/bin/pg_ctl -D /etc/postgresql/12/main start 
 EXPOSE 5432
 USER root
+            
+RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install libtiff5 libtiff5-dev libcurl4 libcurl4-gnutls-dev
 
-RUN wget https://github.com/OSGeo/PROJ/releases/download/6.3.2/proj-6.3.2.tar.gz
-RUN tar -xvzf proj-6.3.2.tar.gz
-RUN cd proj-6.3.2 && ./configure && make -j`cat /proc/cpuinfo | awk '/^processor/{print $3}' | wc -l`  && make install
-RUN rm -rf proj-6.3.2
-RUN rm -rf proj-6.3.2.tar.gz
+RUN wget http://download.osgeo.org/proj/proj-8.2.0.tar.gz
+RUN tar -xvzf proj-8.2.0.tar.gz
+RUN cd proj-8.2.0 && ./configure && make -j`cat /proc/cpuinfo | awk '/^processor/{print $3}' | wc -l`  && make install
+RUN rm -rf proj-8.2.0
+RUN rm -rf proj-8.2.0.tar.gz
 
-RUN wget https://github.com/OSGeo/gdal/releases/download/v3.1.0/gdal-3.1.0.tar.gz 
-RUN tar -xvzf gdal-3.1.0.tar.gz
-RUN cd gdal-3.1.0 && ./configure --with-proj=/usr/local && make -j`cat /proc/cpuinfo | awk '/^processor/{print $3}' | wc -l`  && make install
-RUN rm -rf gdal-3.1.0
-RUN rm -rf gdal-3.1.0.tar.gz
+RUN wget http://github.com/OSGeo/gdal/releases/download/v3.4.0/gdal-3.4.0.tar.gz
+RUN tar -xvzf gdal-3.4.0.tar.gz
+RUN cd gdal-3.4.0 && ./configure --with-proj=/usr/local && make -j`cat /proc/cpuinfo | awk '/^processor/{print $3}' | wc -l`  && make install
+RUN rm -rf gdal-3.4.0
+RUN rm -rf gdal-3.4.0.tar.gz
 
-RUN wget http://download.osgeo.org/geos/geos-3.8.1.tar.bz2
-RUN tar -xvjf geos-3.8.1.tar.bz2
-RUN cd geos-3.8.1 && ./configure && make -j`cat /proc/cpuinfo | awk '/^processor/{print $3}' | wc -l`  && make install
-RUN rm -rf geos-3.8.1
-RUN rm geos-3.8.1.tar.bz2
+RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install cmake
+RUN wget http://download.osgeo.org/geos/geos-3.10.1.tar.bz2
+RUN tar -xvjf geos-3.10.1.tar.bz2
+RUN cd geos-3.10.1 && mkdir build && cd build && cmake .. && make -j`cat /proc/cpuinfo | awk '/^processor/{print $3}' | wc -l`  && make install
+RUN rm -rf geos-3.10.1
+RUN rm geos-3.10.1.tar.bz2
 
-RUN wget http://download.osgeo.org/postgis/source/postgis-3.0.1.tar.gz
-RUN tar -xvzf postgis-3.0.1.tar.gz
+RUN wget http://download.osgeo.org/postgis/source/postgis-3.2.0.tar.gz
+RUN tar -xvzf postgis-3.2.0.tar.gz
 RUN (export CPLUS_INCLUDE_PATH=/usr/include/gdal; \
      export C_INCLUDE_PATH=/usr/include/gdal; \
-     cd postgis-3.0.1 && ./configure && make -j`cat /proc/cpuinfo | awk '/^processor/{print $3}' | wc -l` && make install)
-RUN rm -rf postgis-3.0.1
-RUN rm postgis-3.0.1.tar.gz
+     cd postgis-3.2.0 && ./configure && make -j`cat /proc/cpuinfo | awk '/^processor/{print $3}' | wc -l` && make install)
+RUN rm -rf postgis-3.2.0
+RUN rm postgis-3.2.0.tar.gz
 
 RUN DEBIAN_FRONTEND="noninteractive" apt-get install -y cmake unzip
 RUN wget https://github.com/isciences/exactextract/archive/master.zip
