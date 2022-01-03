@@ -10,11 +10,11 @@ RUN touch /etc/apt/sources.list.d/pgdg.list
 RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ focal-pgdg main" > /etc/apt/sources.list.d/pgdg.list
 RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
 RUN apt-get update
-RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install postgresql-12 postgresql-server-dev-12 netcat build-essential libxml2 libxml2-dev libprotobuf-c1 libprotobuf-c-dev  \
+RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install postgresql-14 postgresql-server-dev-14 netcat build-essential libxml2 libxml2-dev libprotobuf-c1 libprotobuf-c-dev  \
      libprotobuf-dev protobuf-compiler protobuf-c-compiler libsqlite3-dev pkg-config sqlite3 libjson-c-dev
 
 USER postgres
-RUN /usr/lib/postgresql/12/bin/pg_ctl -D /etc/postgresql/12/main start 
+RUN /usr/lib/postgresql/14/bin/pg_ctl -D /etc/postgresql/14/main start 
 EXPOSE 5432
 USER root
             
